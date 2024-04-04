@@ -48,6 +48,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation ("com.mesibo.api:webrtc:1.0.5")
     implementation ("io.socket:socket.io-client:2.1.0") {
         // excluding org.json which is provided by Android
         exclude("org.json" ,"json")
