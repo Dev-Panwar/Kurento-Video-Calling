@@ -1,9 +1,6 @@
 package dev.panwar.kurentogroupvideocalling
 
 import android.os.Bundle
-import android.view.View
-import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,15 +8,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import dev.panwar.kurentogroupvideocalling.databinding.ActivityMainBinding
 import dev.panwar.kurentogroupvideocalling.models.Message
-import io.socket.client.IO
-import io.socket.client.Socket
-import io.socket.emitter.Emitter
+import dev.panwar.kurentogroupvideocalling.models.User
+import org.json.JSONArray
 import org.json.JSONObject
+import org.webrtc.IceCandidate
+import org.webrtc.PeerConnection
+import org.webrtc.PeerConnectionFactory
+import org.webrtc.SessionDescription
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var socketManager: SocketManager
     private lateinit var binding: ActivityMainBinding
+    private val participants = mutableMapOf<String, User>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,6 +35,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+
+
         binding.apply {
             btnJoinRoom.setOnClickListener {
                 val userName = etUsername.text.toString()
@@ -45,19 +49,29 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }else{
-                    val message = Message(
-                        event = "joinRoom",
-                        userName = userName,
-                        roomName = roomName
-                    )
+                    val message = JSONObject()
+                    message.put("event", "joinRoom")
+                    message.put("userName", userName)
+                    message.put("roomName", roomName)
+
                     socketManager.emitMessage(message)
+
+                    PeerConnectionFactory.initialize(
+                        PeerConnectionFactory.InitializationOptions.builder(this@MainActivity)
+                            .createInitializationOptions()
+                    )
+
                 }
             }
         }
     }
 
+
+
     override fun onDestroy() {
         socketManager.disconnectSocket()
         super.onDestroy()
     }
+
+
 }

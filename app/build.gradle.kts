@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.daemon.client.KotlinCompilerClient.compile
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -53,4 +55,8 @@ dependencies {
         exclude("org.json" ,"json")
     }
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation ("fi.vtt.nubomedia:kurento-room-client-android:1.1.2")
+//    implementation ("org.webrtc:google-webrtc:1.0.32006")
+    implementation ("com.mesibo.api:webrtc:1.0.5")
+
 }
